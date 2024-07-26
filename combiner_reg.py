@@ -44,8 +44,8 @@ if __name__ == '__main__':
     parser.add_argument('-c',
                         '--clusters-size',
                         dest='clusters_sz',
-                        default='10',
-                        help='Number of neurons per cluster (default: 10).',
+                        default='2',
+                        help='Number of neurons per cluster (default: 2).',
                         required=False)
 
     args = parser.parse_args()

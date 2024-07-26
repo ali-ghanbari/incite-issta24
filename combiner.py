@@ -42,8 +42,8 @@ if __name__ == '__main__':
     parser.add_argument('-c',
                         '--clusters-size',
                         dest='clusters_sz',
-                        default='10',
-                        help='Number of neurons per cluster (default: 10).',
+                        default='2',
+                        help='Number of neurons per cluster (default: 2).',
                         required=False)
 
     args = parser.parse_args()
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         print('Loading module model for class %d...' % module_index)
         modules[module_index] = load_model(module_file)
     print('Loading original model...')
-    original_model = load_model(path.join(args.base_dir, '%s.h5' % basename))
+    original_model = load_model(path.join(args.base_dir, '%s.keras' % basename))
     print('Loading datasets 1/2...')
     input_data = np.load(args.test_in_filename)
     print('Loading datasets 2/2...')

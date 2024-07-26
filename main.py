@@ -63,14 +63,14 @@ if __name__ == '__main__':
     parser.add_argument('-c',
                         '--cluster-size',
                         dest='cluster_size',
-                        default='10',
+                        default='2',
                         help='Number neurons per neuron cluster.',
                         required=False)
     parser.add_argument('-o',
                         '--optimizer',
                         dest='optimizer',
-                        help='Optimizer for re-training the last layer of the slice, e.g., \'adam\', \'sgd\', etc.'
-                             '(default: adam).',
+                        help='Optimizer for re-training the last layer of the slice, e.g., \'adam\', \'sgd\', etc. '
+                             '(default: adam)',
                         default='adam',
                         required=False)
     parser.add_argument('-e',
@@ -83,7 +83,7 @@ if __name__ == '__main__':
                         '--patience',
                         dest='patience',
                         help='Patience level for early stopping during model weight adjustment (default: -1, i.e., '
-                             'infinite patience).',
+                             'infinite patience)',
                         default='-1',
                         required=False)
     parser.add_argument('-dev',
