@@ -1,8 +1,12 @@
+import os
+import tempfile
+
 import numpy as np
 from keras import Sequential
 from keras.callbacks import EarlyStopping
 from keras.layers import Dense, Conv2D, MaxPooling2D, AveragePooling2D, Flatten, Dropout, BatchNormalization
 from keras.models import load_model
+from keras.callbacks import ModelCheckpoint
 
 
 def create_like_pruned_layer(layer, units=None):
@@ -189,18 +193,28 @@ class OptimizedRankedSlicerCls(Slicer):
         sliced_last_layer.set_weights(w)
 
         if self._retrain:
-            callbacks = None
+            with tempfile.NamedTemporaryFile(delete=True) as temp_file:
+                temp_model_file_name = temp_file.name + '.weights.h5'
+            callbacks = [ModelCheckpoint(temp_model_file_name,
+                                         monitor='val_acc',
+                                         save_best_only=True,
+                                         save_weights_only=True,
+                                         mode='auto',
+                                         verbose=0)]
             if self._patience > 0:
-                callbacks = [EarlyStopping(monitor='val_acc',
-                                           patience=self._patience,
-                                           mode='auto',
-                                           verbose=1,
-                                           restore_best_weights=True)]
+                callbacks.append(EarlyStopping(monitor='val_acc',
+                                               patience=self._patience,
+                                               mode='auto',
+                                               verbose=0,
+                                               restore_best_weights=True))
+            print('Adjusting last layer weights for module #%d...' % output_index)
             sliced_model.fit(self._train_inputs,
                              self._train_outputs,
                              epochs=self._epochs,
                              validation_split=self._val_split,
                              callbacks=callbacks)
+            sliced_model.load_weights(temp_model_file_name)
+            os.remove(temp_model_file_name)
         return sliced_model
 
 
@@ -212,14 +226,16 @@ class OptimizedRankedSlicerReg(Slicer):
                  train_data=None,
                  validation_split=0.1,
                  optimizer='adam',
-                 epochs=64):
+                 epochs=64,
+                 patience=-1):
         super().__init__(model_filename,
                          expanded_contrib_matrix,
                          top_percentage,
                          train_data,
                          validation_split,
                          optimizer,
-                         epochs)
+                         epochs,
+                         patience)
 
     def get_slice(self, output_index):
         expanded_contrib_matrix = self._expanded_contrib_matrix[output_index]
@@ -295,16 +311,26 @@ class OptimizedRankedSlicerReg(Slicer):
                     w[1][0] = layer_weights[1][unit_index]
         sliced_last_layer.set_weights(w)
         if self._retrain:
-            callbacks = None
+            with tempfile.NamedTemporaryFile(delete=True) as temp_file:
+                temp_model_file_name = temp_file.name + '.weights.h5'
+            callbacks = [ModelCheckpoint(temp_model_file_name,
+                                         monitor='val_mae',
+                                         save_best_only=True,
+                                         save_weights_only=True,
+                                         mode='auto',
+                                         verbose=0)]
             if self._patience > 0:
-                callbacks = [EarlyStopping(monitor='val_mae',
-                                           patience=self._patience,
-                                           mode='auto',
-                                           verbose=1,
-                                           restore_best_weights=True)]
+                callbacks.append(EarlyStopping(monitor='val_mae',
+                                               patience=self._patience,
+                                               mode='auto',
+                                               verbose=0,
+                                               restore_best_weights=True))
+            print('Adjusting last layer weights for module #%d...' % output_index)
             sliced_model.fit(self._train_inputs,
                              self._train_outputs,
                              epochs=self._epochs,
                              validation_split=self._val_split,
                              callbacks=callbacks)
+            sliced_model.load_weights(temp_model_file_name)
+            os.remove(temp_model_file_name)
         return sliced_model

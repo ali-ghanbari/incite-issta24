@@ -63,8 +63,8 @@ if __name__ == '__main__':
     parser.add_argument('-c',
                         '--cluster-size',
                         dest='cluster_size',
-                        default='2',
-                        help='Number neurons per neuron cluster.',
+                        default='10',
+                        help='Number neurons per neuron cluster (default: 10)',
                         required=False)
     parser.add_argument('-o',
                         '--optimizer',
@@ -76,8 +76,8 @@ if __name__ == '__main__':
     parser.add_argument('-e',
                         '--epochs',
                         dest='epochs',
-                        help='Number of epochs used for re-training the last layer of the slice (default: 64)',
-                        default='64',
+                        help='Number of epochs used for re-training the last layer of the slice (default: 128)',
+                        default='128',
                         required=False)
     parser.add_argument('-p',
                         '--patience',

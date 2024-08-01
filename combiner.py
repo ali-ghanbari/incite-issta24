@@ -2,6 +2,7 @@ from glob import glob
 import os
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 from argparse import ArgumentParser  # noqa
 from keras.models import load_model  # noqa
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('-c',
                         '--clusters-size',
                         dest='clusters_sz',
-                        default='2',
+                        default='10',
                         help='Number of neurons per cluster (default: 2).',
                         required=False)
 

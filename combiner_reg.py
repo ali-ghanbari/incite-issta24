@@ -4,6 +4,7 @@ import os
 from keras.losses import mean_absolute_error
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 from argparse import ArgumentParser  # noqa
 from keras.models import load_model  # noqa
@@ -28,7 +29,7 @@ if __name__ == '__main__':
                         dest='test_out_filename',
                         help='Test output file in .npy format',
                         required=True)
-    parser.add_argument('-n',
+    parser.add_argument('-th',
                         '--threshold',
                         dest='threshold',
                         default='0.6',
@@ -44,8 +45,8 @@ if __name__ == '__main__':
     parser.add_argument('-c',
                         '--clusters-size',
                         dest='clusters_sz',
-                        default='2',
-                        help='Number of neurons per cluster (default: 2).',
+                        default='10',
+                        help='Number of neurons per cluster (default: 10).',
                         required=False)
 
     args = parser.parse_args()

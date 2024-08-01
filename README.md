@@ -44,9 +44,9 @@ The file `main.py` is the entry point for Incite.
 Basic usage of Incite is as follows, where optional parameter are placed inside square brackets.
 
 ```text
-main.py [-h] -m MODEL_FILENAME [-tt TASK_TYPE] -tri TRAIN_IN_FILENAME -tro TRAIN_OUT_FILENAME -tsi TEST_IN_FILENAME
-    -tso TEST_OUT_FILENAME [-vs VALIDATION_SPLIT] [-th THRESHOLD] [-w WEIGHT_FRACTION] [-c CLUSTER_SIZE]
-    [-o OPTIMIZER] [-e EPOCHS] [-p PATIENCE] [-dev DEVICE]
+main.py [-h] -m MODEL_FILENAME [-tt TASK_TYPE] -tri TRAIN_IN_FILENAME -tro TRAIN_OUT_FILENAME
+        -tsi TEST_IN_FILENAME -tso TEST_OUT_FILENAME [-vs VALIDATION_SPLIT]
+        [-th THRESHOLD] [-w WEIGHT_FRACTION] [-c CLUSTER_SIZE] [-o OPTIMIZER] [-e EPOCHS] [-p PATIENCE] [-dev DEVICE]
 ```
 
 Detailed information of the parameters are as follows.
@@ -71,11 +71,11 @@ Detailed information of the parameters are as follows.
   -w WEIGHT_FRACTION, --weight-fraction WEIGHT_FRACTION
                         The fraction to add/subtract when mutating the weights (default: 0.1)
   -c CLUSTER_SIZE, --cluster-size CLUSTER_SIZE
-                        Number neurons per neuron cluster.
+                        Number neurons per neuron cluster (default: 10)
   -o OPTIMIZER, --optimizer OPTIMIZER
-                        Optimizer for re-training the last layer of the slice, e.g., 'adam', 'sgd', etc.(default: adam)
+                        Optimizer for re-training the last layer of the slice, e.g., 'adam', 'sgd', etc. (default: adam)
   -e EPOCHS, --epochs EPOCHS
-                        Number of epochs used for re-training the last layer of the slice (default: 64)
+                        Number of epochs used for re-training the last layer of the slice (default: 128)
   -p PATIENCE, --patience PATIENCE
                         Patience level for early stopping during model weight adjustment (default: -1, i.e., infinite patience)
   -dev DEVICE, --device DEVICE

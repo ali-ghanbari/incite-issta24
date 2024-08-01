@@ -87,7 +87,7 @@ class Entry:
         else:
             unit_clustering = UnitClustering(self._model)
             clusters = unit_clustering.get_clusters(self._cluster_sz)
-            ncm = NeuronContributionMatrix(self._model, self._train_in)
+            ncm = NeuronContributionMatrix(self._model, self._train_in, class_tt=(self._task_type == 'class'))
             mg = MutationGenerator(self._model_filename, clusters, self._fraction)
             mg.get_mutations([ncm, counter])
             expanded_contrib_matrix = ncm.get_expanded_contrib_matrix()
@@ -113,7 +113,8 @@ class Entry:
                                                   train_data=(bin_train_in, bin_train_out),
                                                   validation_split=self._validation_split,
                                                   optimizer=self._optimizer,
-                                                  epochs=self._epochs)
+                                                  epochs=self._epochs,
+                                                  patience=self._patience)
                 sliced_model = slicer.get_slice(target)
                 with open(path.join(out_dir, module_name + '-perf.txt'), 'w') as f:
                     class_indices = np.where(np.argmax(self._test_out, axis=1) == target)[0]
@@ -132,7 +133,8 @@ class Entry:
                                                   train_data=(sliced_train_in, sliced_train_out),
                                                   validation_split=self._validation_split,
                                                   optimizer=self._optimizer,
-                                                  epochs=self._epochs)
+                                                  epochs=self._epochs,
+                                                  patience=self._patience)
                 sliced_model = slicer.get_slice(target)
                 with open(path.join(out_dir, module_name + '-perf.txt'), 'w') as f:
                     original_model_mae = mean_absolute_error(original_predictions[:, target], sliced_test_out)
